@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 
 <head>
     <meta charset="UTF-8">
@@ -14,122 +14,122 @@
 </head>
 
 <body>
+    <nav class="top-nav">
+        <div class="nav-brand">
+            <img src="img/logo_uny.png" alt="Logo UNY" class="nav-logo">
+            <img src="img/Logo Teknik Industri UNY.png" alt="Logo TI UNY" class="nav-logo">
+            <div class="brand-text">
+                <span class="course-title">Mata Kuliah Analitika Data</span>
+                <span class="univ-title">Teknik Industri - UNY</span>
+            </div>
+        </div>
+        <div class="nav-links">
+            <a href="overview.html" class="nav-link">Overview</a>
+            <a href="index.html" class="nav-link active">Dashboard</a>
+            <a href="penjelasan.html" class="nav-link">Data Flow</a>
+        </div>
+    </nav>
+
     <div class="dashboard-wrapper">
 
-        <nav class="top-nav">
-            <a href="index.html" class="nav-link active">Dashboard Utama</a>
-            <a href="penjelasan.html" class="nav-link">Penjelasan Data</a>
-        </nav>
         <h1>Dashboard Monitoring Kematian dan Vaksinasi</h1>
+
+        <div class="filter-container">
+            <div class="custom-dropdown">
+                <button class="dropdown-btn" onclick="toggleDropdown('listTahun')">Pilih Tahun ▼</button>
+                <div id="listTahun" class="dropdown-content" style="display: none;"></div>
+            </div>
+
+            <div class="custom-dropdown">
+                <button class="dropdown-btn" onclick="toggleDropdown('listBulan')">Pilih Bulan ▼</button>
+                <div id="listBulan" class="dropdown-content" style="display: none;"></div>
+            </div>
+
+            <div class="custom-dropdown">
+                <button class="dropdown-btn" onclick="toggleDropdown('listProvinsi')">Pilih Provinsi ▼</button>
+                <div id="listProvinsi" class="dropdown-content" style="display: none;"></div>
+            </div>
+
+            <button class="btn-apply" onclick="applyFilter()">
+                Terapkan Filter
+            </button>
+
+            <button class="btn-clear" onclick="clearFilters()"
+                style="background-color: #dc3545; border-color: #dc3545;">
+                Bersihkan Filter
+            </button>
+        </div>
+
+        <div id="infoFilterAktif"></div>
+
+        <div class="kpi-container">
+            <div class="card">
+                <h3>Total Kematian</h3>
+                <h2 id="totalKematian">0</h2>
+            </div>
+            <div class="card">
+                <h3>Total Vaksinasi</h3>
+                <h2 id="totalVaksinasi">0</h2>
+            </div>
+            <div class="card">
+                <h3>Rasio (%)</h3>
+                <h2 id="rasio">0</h2>
+            </div>
+        </div>
+
+        <div class="charts-grid">
+            <div class="chart-wrapper">
+                <canvas id="chartKematian"></canvas>
+            </div>
+            <div class="chart-wrapper">
+                <canvas id="chartPersentase"></canvas>
+            </div>
+            <div class="chart-wrapper">
+                <canvas id="chartVaksinasi"></canvas>
+            </div>
+            <div class="chart-wrapper">
+                <canvas id="chartTotalGabungan"></canvas>
+            </div>
+        </div>
+
+        <div class="charts-grid" style="grid-template-columns: 1fr; margin-top: 20px;">
+            <div class="chart-wrapper" style="height: 550px;">
+                <canvas id="chartMap"></canvas>
+            </div>
+        </div>
+
+        <div class="insight-box">
+            <h2>Interpretasi Otomatis</h2>
+            <p id="insightText"></p>
+        </div>
+
+        <!-- <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Nama Provinsi</th>
+                        <th>Tahun</th>
+                        <th>Bulan</th>
+                        <th>Minggu</th>
+                        <th>Jumlah Kematian</th>
+                        <th>Jumlah Vaksinasi</th>
+                        <th>Persentase (%)</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBodyData"></tbody>
+            </table>
+        </div> -->
+        <!-- <div id="pagination" class="pagination-container"></div> -->
     </div>
-
-    <div class="filter-container"
-        style="display: flex; gap: 10px; align-items: center; justify-content: center; flex-wrap: wrap;">
-
-        <div class="custom-dropdown">
-            <button class="dropdown-btn" onclick="toggleDropdown('listTahun')">Pilih Tahun ▼</button>
-            <div id="listTahun" class="dropdown-content" style="display: none;"></div>
+    <footer class="site-footer">
+        <h3>Dikembangkan Oleh:</h3>
+        <div class="dev-names">
+            <span>Sesa Nugroho Satriva - 23051430031</span>
+            <span class="divider">|</span>
+            <span>Baja Ikhlas Auriol - 23051430043</span>
         </div>
+    </footer>
 
-        <div class="custom-dropdown">
-            <button class="dropdown-btn" onclick="toggleDropdown('listBulan')">Pilih Bulan ▼</button>
-            <div id="listBulan" class="dropdown-content" style="display: none;"></div>
-        </div>
-
-        <div class="custom-dropdown">
-            <button class="dropdown-btn" onclick="toggleDropdown('listProvinsi')">Pilih Provinsi ▼</button>
-            <div id="listProvinsi" class="dropdown-content" style="display: none;"></div>
-        </div>
-
-        <button class="btn-apply" onclick="applyFilter()"
-            style="padding: 8px 15px; background: #0d6efd; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">
-            Terapkan Filter
-        </button>
-
-        <button class="btn-clear" onclick="clearFilters()"
-            style="padding: 8px 15px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">
-            Bersihkan Filter
-        </button>
-
-    </div>
-
-    <div id="infoFilterAktif"
-        style="margin-top: 20px; padding: 15px; background-color: #e3f2fd; border: 1px solid #90caf9; border-radius: 5px; color: #0d47a1; font-size: 14px; display: none; text-align: center;">
-    </div>
-
-    <div class="kpi-container">
-
-        <div class="card">
-
-            <h3>Total Kematian</h3>
-
-            <h2 id="totalKematian">0</h2>
-
-        </div>
-
-        <div class="card">
-
-            <h3>Total Vaksinasi</h3>
-
-            <h2 id="totalVaksinasi">0</h2>
-
-        </div>
-
-        <div class="card">
-
-            <h3>Rasio (%)</h3>
-
-            <h2 id="rasio">0</h2>
-
-        </div>
-
-    </div>
-    <div class="charts-grid">
-        <div class="chart-wrapper">
-            <canvas id="chartKematian"></canvas>
-        </div>
-        <div class="chart-wrapper">
-            <canvas id="chartPersentase"></canvas>
-        </div>
-        <div class="chart-wrapper">
-            <canvas id="chartVaksinasi"></canvas>
-        </div>
-        <div class="chart-wrapper">
-            <canvas id="chartTotalGabungan"></canvas>
-        </div>
-    </div>
-    <div class="insight-box">
-        <div class="chart-wrapper" style="height: 480px;">
-            <canvas id="chartMap"></canvas>
-        </div>
-    </div>
-    <div class="insight-box">
-
-        <h2>
-            Interpretasi Otomatis
-        </h2>
-
-        <p id="insightText"></p>
-
-    </div>
-    <!-- <div class="table-container">
-        <table class="data-table">
-            <thead>
-                <tr>
-                    <th>Nama Provinsi</th>
-                    <th>Tahun</th>
-                    <th>Bulan</th>
-                    <th>Minggu</th>
-                    <th>Jumlah Kematian</th>
-                    <th>Jumlah Vaksinasi</th>
-                    <th>Persentase (%)</th>
-                </tr>
-            </thead>
-            <tbody id="tableBodyData"></tbody>
-        </table>
-    </div>
-
-    <div id="pagination" class="pagination-container"></div> -->
     <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-geo@4.2.8/build/index.umd.min.js"></script>
     <script src="js/database.js"></script>
     <script src="js/filter.js"></script>
