@@ -7,7 +7,7 @@
     <title>Dashboard Kematian vs Vaksinasi</title>
 
     <link rel="stylesheet" href="css/style.css">
-    
+
     <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -99,6 +99,11 @@
         </div>
     </div>
     <div class="insight-box">
+        <div class="chart-wrapper" style="height: 480px;">
+            <canvas id="chartMap"></canvas>
+        </div>
+    </div>
+    <div class="insight-box">
 
         <h2>
             Interpretasi Otomatis
@@ -125,7 +130,7 @@
     </div>
 
     <div id="pagination" class="pagination-container"></div> -->
-
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-geo@4.2.8/build/index.umd.min.js"></script>
     <script src="js/database.js"></script>
     <script src="js/filter.js"></script>
     <script src="js/chart.js"></script>

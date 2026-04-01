@@ -1,4 +1,5 @@
-let chartKematianInst, chartPersenInst, chartVaksinasiInst, chartGabunganInst;
+let chartKematianInst, chartPersenInst, chartVaksinasiInst, chartGabunganInst, chartMapInst;
+let inaGeoJson = null;
 
 // Palet warna standar yang mirip dengan Microsoft Excel
 const excelColors = [
@@ -11,12 +12,13 @@ const excelColors = [
 Chart.defaults.font.family = "'Segoe UI', 'Helvetica Neue', 'Arial', sans-serif";
 Chart.defaults.color = '#595959';
 
-function render4Charts(dataMingguan, dataProvinsi) {
+function render4Charts(dataMingguan, dataProvinsi, selectedProvinsi) {
     // Bersihkan chart lama saat filter diterapkan
     if (chartKematianInst) chartKematianInst.destroy();
     if (chartPersenInst) chartPersenInst.destroy();
     if (chartVaksinasiInst) chartVaksinasiInst.destroy();
     if (chartGabunganInst) chartGabunganInst.destroy();
+    if (chartMapInst) chartMapInst.destroy();
 
     // --- 1. PROSES DATA MINGGUAN ---
     let listMinggu = [...new Set(dataMingguan.map(r => r[0]))].sort((a, b) => a - b);
@@ -49,8 +51,6 @@ function render4Charts(dataMingguan, dataProvinsi) {
         dsPersen.push({ ...baseStyle, data: dPer });
         dsVaksinasi.push({ ...baseStyle, data: dVak });
     });
-
-    // --- TEMPLATE PENGATURAN UNTUK 3 GRAFIK MINGGUAN ---
     // --- TEMPLATE PENGATURAN UNTUK 3 GRAFIK MINGGUAN ---
     const getCommonOptions = (title, isPercent = false) => ({
         responsive: true,
@@ -123,10 +123,9 @@ function render4Charts(dataMingguan, dataProvinsi) {
             responsive: true,
             maintainAspectRatio: false,
 
-            // --- TAMBAHKAN INTERACTION DI SINI ---
             interaction: {
-                mode: 'index',     // 'index' agar menampilkan data Vaksinasi & Kematian sekaligus saat di-hover
-                intersect: false   // Tidak perlu pas kena titik
+                mode: 'index',
+                intersect: false
             },
 
             plugins: {
@@ -147,4 +146,131 @@ function render4Charts(dataMingguan, dataProvinsi) {
             }
         }
     });
+    const renderMap = () => {
+        const features = inaGeoJson.features;
+
+        // 1. BUAT KAMUS ALIAS PROVINSI
+        // Kiri: Nama di GeoJSON | Kanan: Nama di dataset.xlsx Anda
+        const aliasProvinsi = {
+            "PROBANTEN": "BANTEN",
+            "DI. ACEH": "ACEH",
+            "NANGGROE ACEH DARUSSALAM": "ACEH", // Jaga-jaga jika formatnya begini
+            "DAERAH ISTIMEWA YOGYAKARTA": "DI YOGYAKARTA",
+            "D.I. YOGYAKARTA": "DI YOGYAKARTA",
+            "DAERAH KHUSUS IBUKOTA JAKARTA": "DKI JAKARTA",
+            "KEPULAUAN BANGKA BELITUNG": "BANGKA BELITUNG",
+            "NUSATENGGARA BARAT": "NUSA TENGGARA BARAT",
+            "IRIAN JAYA BARAT": "PAPUA BARAT",
+            "IRIAN JAYA": "PAPUA", 
+            "IRIAN JAYA TIMUR": "PAPUA",
+            "IRIAN JAYA TENGAH": "PAPUA",
+            "BANGKA BELITUNG" :"SUMATERA SELATAN"
+            // Silakan tambahkan sendiri di sini jika nanti ada provinsi lain yang abu-abu!
+        };
+
+        // 2. Petakan data BERDASARKAN GeoJSON
+        const mapData = features.map(f => {
+            // Ambil nama dari file GeoJSON dan jadikan huruf besar semua
+            let rawGeoName = (f.properties.Propinsi || f.properties.name || "").toUpperCase();
+
+            // 3. TERJEMAHKAN NAMA (KUNCI PENYELESAIANNYA)
+            // Cek apakah rawGeoName ada di kamus. Jika ada, pakai nama terjemahan. Jika tidak, pakai nama aslinya.
+            let geoProvName = aliasProvinsi[rawGeoName] || rawGeoName;
+
+            // Cari di dataProvinsi (Ingat, dataset Anda bentuknya Array [nama, kematian, vaksinasi])
+            let rowData = dataProvinsi.find(r => r[0].toUpperCase() === geoProvName);
+
+            // Cek filter checkbox
+            let isSelected = false;
+            if (selectedProvinsi === "All") {
+                isSelected = true;
+            } else if (Array.isArray(selectedProvinsi)) {
+                isSelected = rowData ? selectedProvinsi.includes(rowData[0]) : false;
+            }
+
+            return {
+                feature: f,
+                provinsiAsli: geoProvName, // Sekarang namanya sudah bersih (misal: "BANTEN", bukan "PROBANTEN")
+                kematian: rowData ? rowData[1] : 0,
+                vaksinasi: rowData ? rowData[2] : 0,
+                isSelected: isSelected
+            };
+        });
+
+        const ctxMap = document.getElementById("chartMap").getContext("2d");
+
+        // Bersihkan kanvas jika sudah ada peta sebelumnya
+        if (chartMapInst) chartMapInst.destroy();
+
+        chartMapInst = new Chart(ctxMap, {
+            type: 'choropleth',
+            data: {
+                labels: mapData.map(d => d.provinsiAsli),
+                datasets: [{
+                    label: 'Provinsi',
+                    outline: inaGeoJson, // Bingkai peta wilayah Indonesia
+                    data: mapData.map(d => ({
+                        feature: d.feature,
+                        value: d.kematian, // Nilai yang dipakai untuk warna gradien (opsional)
+                        extra: d // Menyimpan data kita sendiri untuk dipanggil di tooltip
+                    })),
+                    backgroundColor: (context) => {
+                        const rawData = context.raw ? context.raw.extra : null;
+
+                        // Jika di luar filter atau data tidak ada di dataset.xlsx
+                        if (!rawData || !rawData.isSelected) return '#e0e0e0';
+
+                        // Warna Biru khas Excel jika ada datanya
+                        return rawData.kematian > 0 ? '#4472C4' : '#A3BCE6';
+                    }
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    title: { display: true, text: "Peta Persebaran Data Provinsi", font: { size: 14, weight: '600' } },
+                    tooltip: {
+                        callbacks: {
+                            label: (context) => {
+                                const d = context.raw.extra;
+                                if (!d || !d.isSelected) return `${d.provinsiAsli} (Di luar filter)`;
+
+                                return [
+                                    `Provinsi: ${d.provinsiAsli}`,
+                                    // Gunakan toFixed(2) agar angka desimal rapi seperti di kartu atas
+                                    `Total Kematian: ${d.kematian.toFixed(2)}`,
+                                    `Total Vaksinasi: ${d.vaksinasi.toFixed(2)}`
+                                ];
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    projection: {
+                        axis: 'x',
+                        projection: 'mercator'
+                    },
+                    color: {
+                        axis: 'x',
+                        display: false // Sembunyikan batang warna biru
+                    }
+                }
+            }
+        });
+    };
+    // Proses Fetching GeoJSON (Hanya berjalan sekali berkat variabel cache 'inaGeoJson')
+    if (!inaGeoJson) {
+        // Menggunakan repositori GeoJSON Indonesia publik yang stabil
+        fetch('https://raw.githubusercontent.com/superpikar/indonesia-geojson/master/indonesia-province-simple.json')
+            .then(res => res.json())
+            .then(data => {
+                inaGeoJson = data;
+                renderMap();
+            })
+            .catch(err => console.error("Gagal memuat peta: ", err));
+    } else {
+        renderMap();
+    }
 }

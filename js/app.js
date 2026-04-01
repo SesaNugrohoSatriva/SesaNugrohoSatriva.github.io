@@ -1,4 +1,4 @@
-function updateDashboard(resMingguan, resProvinsi) {
+function updateDashboard(resMingguan, resProvinsi, listProvinsiTerpilih) {
     if (!resMingguan.length || !resProvinsi.length) return;
 
     let rowsMingguan = resMingguan[0].values;
@@ -18,9 +18,8 @@ function updateDashboard(resMingguan, resProvinsi) {
 
     let rasio = totalVaksinasi > 0 ? (totalKematian / totalVaksinasi) * 100 : 0;
     document.getElementById("rasio").innerText = rasio.toFixed(2);
-
     // PANGGIL FUNGSI CHART.JS YANG BARU!
-    render4Charts(rowsMingguan, rowsProvinsi);
+    render4Charts(rowsMingguan, rowsProvinsi, listProvinsiTerpilih);
     generateInsight(rowsMingguan);
     // generateDataTable(rowsMingguan);
 }

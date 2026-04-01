@@ -125,8 +125,9 @@ function applyFilter() {
 
     const resultMingguan = db.exec(queryMingguan);
     const resultProvinsi = db.exec(queryProvinsi);
+    let statusProvinsiUntukPeta = (provinsi.length === 0 || provinsi.length === totalProvinsi) ? "All" : provinsi;
 
-    updateDashboard(resultMingguan, resultProvinsi);
+    updateDashboard(resultMingguan, resultProvinsi, statusProvinsiUntukPeta);
 }
 
 // --- FITUR BARU: Bersihkan Semua Filter ---
