@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Overview - Analitika Data COVID-19</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <nav class="top-nav">
+        <div class="nav-brand">
+            <img src="img/logo_uny.png" alt="Logo UNY" class="nav-logo">
+            <img src="img/Logo Teknik Industri UNY.png" alt="Logo TI UNY" class="nav-logo">
+            <div class="brand-text">
+                <span class="course-title">Mata Kuliah Analitika Data</span>
+                <span class="univ-title">Teknik Industri - UNY</span>
+            </div>
+        </div>
+        <div class="nav-links">
+            <a href="overview.html" class="nav-link active">Overview</a>
+            <a href="index.html" class="nav-link">Dashboard</a>
+            <a href="penjelasan.html" class="nav-link">Data Flow</a>
+        </div>
+    </nav>
+    <div class="dashboard-wrapper">
+
+        <h1>Overview Proyek Analitika Data</h1>
+
+        <div class="insight-box" style="margin-bottom: 25px;">
+            <h2>Latar Belakang Masalah</h2>
+            <p>Program vaksinasi COVID-19 dilaksanakan secara nasional di seluruh provinsi Indonesia. Tingkat cakupan
+                vaksinasi antar provinsi tidak seragam. Di sisi lain, angka kematian akibat COVID-19 juga menunjukkan
+                variasi antar wilayah dan fluktuasi dari minggu ke minggu. Perbedaan tersebut menimbulkan kebutuhan
+                untuk melihat secara empiris apakah terdapat hubungan antara tingkat vaksinasi dan laju kematian
+                COVID-19. Analisis dilakukan secara mingguan agar perubahan yang terjadi selama tahun 2022-2023 dapat
+                diamati secara lebih terukur.</p>
+        </div>
+
+        <div class="charts-grid" style="grid-template-columns: 1fr 1fr;">
+            <div class="chart-wrapper" style="min-height: auto;">
+                <h2 style="font-size: 18px; color: #1F4E79; border-bottom: 2px solid #ED7D31; padding-bottom: 10px;">
+                    Problem Statement</h2>
+                <div class="content-block">
+                    <ol>
+                        <li>Bagaimana rata-rata jumlah kematian akibat COVID-19 di Indonesia dalam periode tahun
+                            2022-2023?</li>
+                        <li>Berapa rata-rata jumlah vaksinasi COVID-19 di Indonesia dalam periode tahun 2022-2023?</li>
+                        <li>Bagaimana rata-rata perbandingan jumlah kematian dengan jumlah vaksinasi COVID-19 di
+                            Indonesia?</li>
+                        <li>Bagaimana tingkat kematian akibat COVID-19 per provinsi tiap minggu?</li>
+                        <li>Bagaimana tingkat vaksinasi COVID-19 per provinsi tiap minggu?</li>
+                        <li>Bagaimana perbandingan tingkat kematian VS Vaksinasi COVID-19 per provinsi per minggu?</li>
+                        <li>Total vaksinasi dan total kematian COVID-19 per provinsi per minggu?</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="chart-wrapper" style="min-height: auto;">
+                <h2 style="font-size: 18px; color: #1F4E79; border-bottom: 2px solid #ED7D31; padding-bottom: 10px;">
+                    Tujuan & Info Dataset</h2>
+                <div class="content-block">
+                    <p><strong>Tujuan Penelitian:</strong><br>Menganalisis perbedaan tingkat vaksinasi antar provinsi
+                        serta membandingkannya dengan laju kematian untuk menemukan wawasan/pola data empiris
+                        menggunakan <em>dashboard</em> interaktif.</p>
+                    <p style="margin-top: 15px;"><strong>Penjelasan Dataset:</strong><br>Data bersumber dari
+                        rekapitulasi penanganan COVID-19 pemerintah yang mencakup seluruh provinsi di Indonesia.
+                        Pengolahan awal (<em>Pre-processing</em>) meliputi:</p>
+                    <ul>
+                        <li>Pembuatan variabel <strong>Minggu Normal</strong> untuk menyelaraskan titik awal waktu antar
+                            tahun.</li>
+                        <li>Transformasi data ke dalam bentuk Tanggal dan Bulan untuk keperluan filter
+                            <em>time-series</em>.
+                        </li>
+                        <li>Pembersihan data dengan menghapus data tahun 2021 karena inkonsistensi jumlah *record*.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- <div class="insight-box" style="margin-top: 25px; border-left-color: #ED7D31;">
+            <h2>Tautan & Sumber Data</h2>
+            <p style="margin-bottom: 15px; font-size: 14px;">Berikut adalah lampiran dokumen dan dataset yang digunakan
+                dalam pengembangan <em>dashboard</em> ini:</p>
+
+            <a href="Laporan Data analitik_Sesa, Baja.docx (1).pdf" target="_blank" class="link-btn">📄 Laporan Proyek
+                (PDF)</a>
+            <a href="Base_Data.xlsx" target="_blank" class="link-btn">📊 Dataset Mentah (Excel)</a>
+            <a href="dataset.xlsx" target="_blank" class="link-btn">📈 Dataset Bersih / Final (Excel)</a>
+            <a href="https://drive.google.com/drive/folders/1XNAKrxzCWL-nRKjWU5I-MKzPbq" target="_blank"
+                class="link-btn">🎥
+                Video Dokumentasi Proyek</a>
+        </div> -->
+    </div>
+    <footer class="site-footer">
+        <h3>Dikembangkan Oleh:</h3>
+        <div class="dev-names">
+            <span>Sesa Nugroho Satriva - 23051430031</span>
+            <span class="divider">|</span>
+            <span>Baja Ikhlas Auriol - 23051430043</span>
+        </div>
+    </footer>
+
+</body>
+
+</html>
