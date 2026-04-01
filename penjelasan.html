@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Penjelasan Pengolahan Data - Dashboard Vaksinasi</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <div class="dashboard-wrapper">
+
+        <nav class="top-nav">
+            <a href="dashboard.html" class="nav-link">Dashboard Utama</a>
+            <a href="penjelasan.html" class="nav-link active">Penjelasan Data</a>
+        </nav>
+
+        <h1>Alur Proses Pengolahan Data</h1>
+
+        <div class="insight-box content-block">
+            <h2>1. Tahap Pra-pemrosesan Data (Microsoft Excel)</h2>
+            <p>Sebelum data dapat divisualisasikan menjadi grafik, data mentah harus melalui proses normalisasi di dalam
+                Excel. Berdasarkan panduan, terdapat tiga variabel turunan yang dibuat untuk melengkapi kolom tahun,
+                minggu, dan provinsi:</p>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Nama Variabel</th>
+                        <th>Rumus Excel</th>
+                        <th>Penjelasan Cara Kerja</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Minggu Normal</strong></td>
+                        <td><code>=IF(B2=0;1;B2)</code></td>
+                        <td>Rumus memeriksa nilai pada kolom minggu. Apabila nilai minggu sama dengan 0, maka diubah
+                            menjadi 1. Ini dilakukan untuk menyeragamkan nilai minggu dan menghindari perbedaan titik
+                            awal waktu antar tahun.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Tanggal</strong></td>
+                        <td><code>=DATE(A2;1;1)+(H2-1)*7</code></td>
+                        <td>Fungsi DATE menghasilkan tanggal awal tahun (1 Januari). Nilai minggu kemudian dikurangi
+                            satu dan dikalikan tujuh untuk menghitung jumlah hari yang harus ditambahkan, sehingga
+                            menghasilkan tanggal awal minggu dalam tahun tersebut.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Bulan</strong></td>
+                        <td><code>=TEXT(I2;"mmmm")</code></td>
+                        <td>Fungsi TEXT mengubah nilai tanggal yang didapat sebelumnya menjadi nama bulan (misalnya
+                            Januari, Februari). Informasi ini krusial untuk pengelompokan data dalam analisis bulanan.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="insight-box content-block">
+            <h2>2. Penyimpanan & Pengolahan Query (SQLite / SQL.js)</h2>
+            <p>File Excel yang telah memiliki kolom <i>Bulan</i> dan <i>Minggu Normal</i> tersebut kemudian diekspor.
+                Sistem web ini memuat data tersebut ke dalam <i>database</i> lokal di peramban <i>(browser)</i>
+                menggunakan <strong>SQL.js</strong>. Hal ini memungkinkan sistem untuk:</p>
+            <ul>
+                <li>Melakukan agregasi data (menjumlahkan Total Kematian dan Vaksinasi) dengan cepat menggunakan
+                    perintah <code>SUM()</code> dan <code>GROUP BY</code>.</li>
+                <li>Menarik data per baris berdasarkan minggu untuk menggambar tren per provinsi.</li>
+            </ul>
+        </div>
+
+        <div class="insight-box content-block">
+            <h2>3. Penerapan Filter & Interaktivitas</h2>
+            <p><i>Dashboard</i> dirancang agar dinamis. Saat pengguna mengubah <i>dropdown</i> (Tahun, Bulan, atau
+                Provinsi) dan menekan "Terapkan Filter", sistem membaca pilihan tersebut dan merakit bahasa SQL di
+                belakang layar. Contoh logikanya:</p>
+            <div class="code-snippet">
+                // Base query mengambil semua data
+                let filterKondisi = "WHERE 1=1";
+
+                // Menambahkan filter sesuai pilihan pengguna
+                if (pilihanTahun !== "Semua Tahun") filterKondisi += ` AND tahun = '${pilihanTahun}'`;
+                if (pilihanBulan !== "Semua Bulan") filterKondisi += ` AND bulan = '${pilihanBulan}'`;
+            </div>
+        </div>
+
+        <div class="insight-box content-block">
+            <h2>4. Visualisasi Data (Chart.js)</h2>
+            <p>Langkah terakhir adalah memproyeksikan data hasil saringan ke dalam kanvas grafik. Tujuannya adalah
+                memindahkan grafik yang awalnya dibuat di Excel ke dalam bentuk web interaktif:</p>
+            <ul>
+                <li><strong>Gaya Visual:</strong> Garis pada grafik diatur dengan ketegangan <code>tension: 0</code>
+                    agar patah-patah/lurus dan tanpa titik ujung <i>(point radius)</i>, sehingga rapi menyerupai format
+                    grafik Microsoft Excel.</li>
+                <li><strong>Manajemen Memori:</strong> Agar grafik tidak bertumpuk (menjadi berantakan) saat filter
+                    ditekan berkali-kali, sistem selalu menjalankan perintah <code>chart.destroy()</code> pada grafik
+                    lama sebelum menggambar grafik yang baru.</li>
+            </ul>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

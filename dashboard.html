@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Dashboard Kematian vs Vaksinasi</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+    <div class="dashboard-wrapper">
+
+        <nav class="top-nav">
+            <a href="dashboard.html" class="nav-link active">Dashboard Utama</a>
+            <a href="penjelasan.html" class="nav-link">Penjelasan Data</a>
+        </nav>
+        <h1>Dashboard Monitoring Kematian dan Vaksinasi</h1>
+    </div>
+
+    <div class="filter-container"
+        style="display: flex; gap: 10px; align-items: center; justify-content: center; flex-wrap: wrap;">
+
+        <div class="custom-dropdown">
+            <button class="dropdown-btn" onclick="toggleDropdown('listTahun')">Pilih Tahun ▼</button>
+            <div id="listTahun" class="dropdown-content" style="display: none;"></div>
+        </div>
+
+        <div class="custom-dropdown">
+            <button class="dropdown-btn" onclick="toggleDropdown('listBulan')">Pilih Bulan ▼</button>
+            <div id="listBulan" class="dropdown-content" style="display: none;"></div>
+        </div>
+
+        <div class="custom-dropdown">
+            <button class="dropdown-btn" onclick="toggleDropdown('listProvinsi')">Pilih Provinsi ▼</button>
+            <div id="listProvinsi" class="dropdown-content" style="display: none;"></div>
+        </div>
+
+        <button class="btn-apply" onclick="applyFilter()"
+            style="padding: 8px 15px; background: #0d6efd; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">
+            Terapkan Filter
+        </button>
+
+        <button class="btn-clear" onclick="clearFilters()"
+            style="padding: 8px 15px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">
+            Bersihkan Filter
+        </button>
+
+    </div>
+
+    <div id="infoFilterAktif"
+        style="margin-top: 20px; padding: 15px; background-color: #e3f2fd; border: 1px solid #90caf9; border-radius: 5px; color: #0d47a1; font-size: 14px; display: none; text-align: center;">
+    </div>
+
+    <div class="kpi-container">
+
+        <div class="card">
+
+            <h3>Total Kematian</h3>
+
+            <h2 id="totalKematian">0</h2>
+
+        </div>
+
+        <div class="card">
+
+            <h3>Total Vaksinasi</h3>
+
+            <h2 id="totalVaksinasi">0</h2>
+
+        </div>
+
+        <div class="card">
+
+            <h3>Rasio (%)</h3>
+
+            <h2 id="rasio">0</h2>
+
+        </div>
+
+    </div>
+    <div class="charts-grid">
+        <div class="chart-wrapper">
+            <canvas id="chartKematian"></canvas>
+        </div>
+        <div class="chart-wrapper">
+            <canvas id="chartPersentase"></canvas>
+        </div>
+        <div class="chart-wrapper">
+            <canvas id="chartVaksinasi"></canvas>
+        </div>
+        <div class="chart-wrapper">
+            <canvas id="chartTotalGabungan"></canvas>
+        </div>
+    </div>
+    <div class="insight-box">
+
+        <h2>
+            Interpretasi Otomatis
+        </h2>
+
+        <p id="insightText"></p>
+
+    </div>
+    <!-- <div class="table-container">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Nama Provinsi</th>
+                    <th>Tahun</th>
+                    <th>Bulan</th>
+                    <th>Minggu</th>
+                    <th>Jumlah Kematian</th>
+                    <th>Jumlah Vaksinasi</th>
+                    <th>Persentase (%)</th>
+                </tr>
+            </thead>
+            <tbody id="tableBodyData"></tbody>
+        </table>
+    </div>
+
+    <div id="pagination" class="pagination-container"></div> -->
+
+    <script src="js/database.js"></script>
+    <script src="js/filter.js"></script>
+    <script src="js/chart.js"></script>
+    <script src="js/insight.js"></script>
+    <!-- <script src="js/table.js"></script> -->
+    <script src="js/app.js"></script>
+
+</body>
+
+</html>
