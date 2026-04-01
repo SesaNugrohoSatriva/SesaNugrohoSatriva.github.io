@@ -24,39 +24,42 @@
             <p>Sebelum data dapat divisualisasikan menjadi grafik, data mentah harus melalui proses normalisasi di dalam
                 Excel. Berdasarkan panduan, terdapat tiga variabel turunan yang dibuat untuk melengkapi kolom tahun,
                 minggu, dan provinsi:</p>
-
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th>Nama Variabel</th>
-                        <th>Rumus Excel</th>
-                        <th>Penjelasan Cara Kerja</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><strong>Minggu Normal</strong></td>
-                        <td><code>=IF(B2=0;1;B2)</code></td>
-                        <td>Rumus memeriksa nilai pada kolom minggu. Apabila nilai minggu sama dengan 0, maka diubah
-                            menjadi 1. Ini dilakukan untuk menyeragamkan nilai minggu dan menghindari perbedaan titik
-                            awal waktu antar tahun.</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Tanggal</strong></td>
-                        <td><code>=DATE(A2;1;1)+(H2-1)*7</code></td>
-                        <td>Fungsi DATE menghasilkan tanggal awal tahun (1 Januari). Nilai minggu kemudian dikurangi
-                            satu dan dikalikan tujuh untuk menghitung jumlah hari yang harus ditambahkan, sehingga
-                            menghasilkan tanggal awal minggu dalam tahun tersebut.</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Bulan</strong></td>
-                        <td><code>=TEXT(I2;"mmmm")</code></td>
-                        <td>Fungsi TEXT mengubah nilai tanggal yang didapat sebelumnya menjadi nama bulan (misalnya
-                            Januari, Februari). Informasi ini krusial untuk pengelompokan data dalam analisis bulanan.
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Nama Variabel</th>
+                            <th>Rumus Excel</th>
+                            <th>Penjelasan Cara Kerja</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Minggu Normal</strong></td>
+                            <td><code>=IF(B2=0;1;B2)</code></td>
+                            <td>Rumus memeriksa nilai pada kolom minggu. Apabila nilai minggu sama dengan 0, maka diubah
+                                menjadi 1. Ini dilakukan untuk menyeragamkan nilai minggu dan menghindari perbedaan
+                                titik
+                                awal waktu antar tahun.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Tanggal</strong></td>
+                            <td><code>=DATE(A2;1;1)+(H2-1)*7</code></td>
+                            <td>Fungsi DATE menghasilkan tanggal awal tahun (1 Januari). Nilai minggu kemudian dikurangi
+                                satu dan dikalikan tujuh untuk menghitung jumlah hari yang harus ditambahkan, sehingga
+                                menghasilkan tanggal awal minggu dalam tahun tersebut.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Bulan</strong></td>
+                            <td><code>=TEXT(I2;"mmmm")</code></td>
+                            <td>Fungsi TEXT mengubah nilai tanggal yang didapat sebelumnya menjadi nama bulan (misalnya
+                                Januari, Februari). Informasi ini krusial untuk pengelompokan data dalam analisis
+                                bulanan.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <div class="insight-box content-block">
