@@ -181,7 +181,11 @@ function render4Charts(dataMingguan, dataProvinsi, selectedProvinsi) {
             let rowData = dataProvinsi.find(r => r[0].toUpperCase() === geoProvName);
 
             let isSelected = false;
-            if (selectedProvinsi === "All") {
+            if (
+                selectedProvinsi === "All" ||
+                selectedProvinsi === "INDONESIA" ||
+                (Array.isArray(selectedProvinsi) && selectedProvinsi.includes("INDONESIA"))
+            ) {
                 isSelected = true;
             } else if (Array.isArray(selectedProvinsi)) {
                 isSelected = rowData ? selectedProvinsi.includes(rowData[0]) : false;
