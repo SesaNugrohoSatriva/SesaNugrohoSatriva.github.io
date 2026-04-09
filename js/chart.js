@@ -1,6 +1,10 @@
 let chartKematianInst, chartPersenInst, chartVaksinasiInst, chartGabunganInst, chartMapInst;
 let inaGeoJson = null;
 
+// 1. TAMBAHKAN VARIABEL GLOBAL INI
+// Digunakan untuk mengunci urutan provinsi agar warnanya tidak berubah saat difilter
+let masterProvinsiList = [];
+
 // Palet warna standar yang mirip dengan Microsoft Excel
 const excelColors = [
     '#4472C4', '#ED7D31', '#A5A5A5', '#FFC000', '#5B9BD5', '#70AD47', '#264478', '#9E480E', '#636363', '#997300',
@@ -24,9 +28,24 @@ function render4Charts(dataMingguan, dataProvinsi, selectedProvinsi) {
     let listMinggu = [...new Set(dataMingguan.map(r => r[0]))].sort((a, b) => a - b);
     let listProvinsi = [...new Set(dataMingguan.map(r => r[1]))].sort();
 
+    // 2. KUNCI DAFTAR PROVINSI
+    // Simpan daftar lengkap saat load awal (sebelum difilter)
+    if (masterProvinsiList.length < listProvinsi.length) {
+        masterProvinsiList = [...listProvinsi];
+    }
+
+    // 3. FUNGSI PENCARI WARNA
+    // Fungsi ini memastikan 1 provinsi selalu dapat warna yang sama persis
+    const getProvColor = (provName) => {
+        let index = masterProvinsiList.indexOf(provName);
+        if (index === -1) index = listProvinsi.indexOf(provName); // Fallback jika tidak ada di master
+        if (index === -1) index = 0; // Fallback aman
+        return excelColors[index % excelColors.length];
+    };
+
     let dsKematian = [], dsPersen = [], dsVaksinasi = [];
 
-    listProvinsi.forEach((prov, i) => {
+    listProvinsi.forEach((prov) => {
         let dKem = [], dPer = [], dVak = [];
 
         listMinggu.forEach(m => {
@@ -50,7 +69,7 @@ function render4Charts(dataMingguan, dataProvinsi, selectedProvinsi) {
 
         let baseStyle = {
             label: prov,
-            borderColor: excelColors[i % excelColors.length],
+            borderColor: getProvColor(prov), // 4. TERAPKAN WARNA KE LINE CHART
             borderWidth: 1.5,
             pointRadius: 0,
             pointHoverRadius: 4,
@@ -66,32 +85,20 @@ function render4Charts(dataMingguan, dataProvinsi, selectedProvinsi) {
     const getCommonOptions = (title, isPercent = false) => ({
         responsive: true,
         maintainAspectRatio: false,
-        layout: {
-            padding: { right: 15 }
-        },
+        layout: { padding: { right: 15 } },
         plugins: {
             title: { display: true, text: title, font: { size: 14, weight: '600' }, padding: { bottom: 15 } },
             legend: {
-                position: 'right',
-                align: 'start',
-                labels: {
-                    boxWidth: 8,
-                    font: { size: 9 },
-                    usePointStyle: false,
-                    padding: 6
-                }
+                position: 'right', align: 'start',
+                labels: { boxWidth: 8, font: { size: 9 }, usePointStyle: false, padding: 6 }
             },
             tooltip: {
-                mode: 'nearest',
-                intersect: false,
-                bodyFont: { size: 11 },
-                titleFont: { size: 12 },
+                mode: 'nearest', intersect: false, bodyFont: { size: 11 }, titleFont: { size: 12 },
                 callbacks: {
                     label: function (context) {
                         let label = context.dataset.label || '';
                         if (label) { label += ': '; }
                         if (context.parsed.y !== null) {
-                            // Format angka tooltip agar desimalnya rapi
                             label += isPercent ? context.parsed.y.toFixed(2) + '%' : context.parsed.y.toLocaleString();
                         }
                         return label;
@@ -100,16 +107,10 @@ function render4Charts(dataMingguan, dataProvinsi, selectedProvinsi) {
             }
         },
         scales: {
-            x: {
-                grid: { display: false },
-                ticks: { font: { size: 10 }, maxRotation: 0 }
-            },
+            x: { grid: { display: false }, ticks: { font: { size: 10 }, maxRotation: 0 } },
             y: {
                 grid: { color: '#f0f0f0' },
-                ticks: {
-                    font: { size: 10 },
-                    callback: function (value) { return isPercent ? value + '%' : value; }
-                }
+                ticks: { font: { size: 10 }, callback: function (value) { return isPercent ? value + '%' : value; } }
             }
         },
         interaction: { mode: 'nearest', axis: 'xy', intersect: false }
@@ -140,9 +141,7 @@ function render4Charts(dataMingguan, dataProvinsi, selectedProvinsi) {
             ]
         },
         options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            interaction: { mode: 'index', intersect: false },
+            responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false },
             plugins: {
                 title: { display: true, text: "Jumlah Vaksinasi dan Kematian", font: { size: 14, weight: '600' } },
                 legend: { position: 'bottom', labels: { boxWidth: 15, font: { size: 11 } } },
@@ -177,13 +176,11 @@ function render4Charts(dataMingguan, dataProvinsi, selectedProvinsi) {
             let rawGeoName = (f.properties.Propinsi || f.properties.name || "").toUpperCase();
             let geoProvName = aliasProvinsi[rawGeoName] || rawGeoName;
 
-            // Cari data provinsi
             let rowData = dataProvinsi.find(r => r[0].toUpperCase() === geoProvName);
 
             let isSelected = false;
             if (
-                selectedProvinsi === "All" ||
-                selectedProvinsi === "INDONESIA" ||
+                selectedProvinsi === "All" || selectedProvinsi === "INDONESIA" ||
                 (Array.isArray(selectedProvinsi) && selectedProvinsi.includes("INDONESIA"))
             ) {
                 isSelected = true;
@@ -191,24 +188,17 @@ function render4Charts(dataMingguan, dataProvinsi, selectedProvinsi) {
                 isSelected = rowData ? selectedProvinsi.includes(rowData[0]) : false;
             }
 
-            // Ambil angka kematian dan vaksinasi
             let totalKematian = rowData ? rowData[1] : 0;
             let totalVaksinasi = rowData ? rowData[2] : 0;
 
-            // --- KALKULASI PERSENTASE OTOMATIS DI SINI ---
-            // Rumus: (Total Kematian / Total Vaksinasi) * 100
             let finalPer = 0;
             if (totalVaksinasi > 0) {
                 finalPer = (totalKematian / totalVaksinasi) * 100;
             }
 
             return {
-                feature: f,
-                provinsiAsli: geoProvName,
-                kematian: totalKematian,
-                vaksinasi: totalVaksinasi,
-                persentase: finalPer, // Masukkan hasil kalkulasi ke sini
-                isSelected: isSelected
+                feature: f, provinsiAsli: geoProvName, kematian: totalKematian,
+                vaksinasi: totalVaksinasi, persentase: finalPer, isSelected: isSelected
             };
         });
 
@@ -223,20 +213,20 @@ function render4Charts(dataMingguan, dataProvinsi, selectedProvinsi) {
                     label: 'Provinsi',
                     outline: inaGeoJson,
                     data: mapData.map(d => ({
-                        feature: d.feature,
-                        value: d.kematian,
-                        extra: d
+                        feature: d.feature, value: d.kematian, extra: d
                     })),
                     backgroundColor: (context) => {
                         const rawData = context.raw ? context.raw.extra : null;
                         if (!rawData || !rawData.isSelected) return '#e0e0e0';
-                        return rawData.kematian > 0 ? '#4472C4' : '#A3BCE6';
+
+                        // 5. TERAPKAN WARNA PADA PETA
+                        // Memanggil fungsi yang sama dengan line chart agar warnanya persis sama
+                        return getProvColor(rawData.provinsiAsli);
                     }
                 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
+                responsive: true, maintainAspectRatio: false,
                 plugins: {
                     legend: { display: false },
                     title: { display: true, text: "Peta Persebaran Data Provinsi", font: { size: 14, weight: '600' } },
@@ -245,12 +235,11 @@ function render4Charts(dataMingguan, dataProvinsi, selectedProvinsi) {
                             label: (context) => {
                                 const d = context.raw.extra;
                                 if (!d || !d.isSelected) return `${d.provinsiAsli} (Di luar filter)`;
-
                                 return [
                                     `Provinsi: ${d.provinsiAsli}`,
-                                    `Total Kematian: ${d.kematian.toLocaleString()}`, // toLocaleString agar ada pemisah ribuan
+                                    `Total Kematian: ${d.kematian.toLocaleString()}`,
                                     `Total Vaksinasi: ${d.vaksinasi.toLocaleString()}`,
-                                    `Rata-rata Persentase Kematian vs Vaksinasi: ${d.persentase.toFixed(2)}%` // Desimal dibatasi 2 digit
+                                    `Rata-rata Persentase: ${d.persentase.toFixed(2)}%`
                                 ];
                             }
                         }
@@ -267,10 +256,7 @@ function render4Charts(dataMingguan, dataProvinsi, selectedProvinsi) {
     if (!inaGeoJson) {
         fetch('https://raw.githubusercontent.com/superpikar/indonesia-geojson/master/indonesia-province-simple.json')
             .then(res => res.json())
-            .then(data => {
-                inaGeoJson = data;
-                renderMap();
-            })
+            .then(data => { inaGeoJson = data; renderMap(); })
             .catch(err => console.error("Gagal memuat peta: ", err));
     } else {
         renderMap();
