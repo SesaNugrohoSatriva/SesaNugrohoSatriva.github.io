@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Penjelasan klasifikasi</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <nav class="top-nav">
+
+        <div class="nav-brand">
+
+            <img src="img/logo_uny.png" alt="Logo UNY" class="nav-logo">
+
+            <img src="img/Logo Teknik Industri UNY.png" alt="Logo TI UNY" class="nav-logo">
+
+            <div class="brand-text">
+
+                <span class="course-title">
+                    Mata Kuliah Analitika Data
+                </span>
+
+                <span class="univ-title">
+                    Teknik Industri - UNY
+                </span>
+
+            </div>
+
+        </div>
+
+        <div class="nav-links">
+            <a href="overview.html" class="nav-link">Overview</a>
+            <a href="executive-summary.html" class="nav-link">Executive Summary</a>
+            <a href="index.html" class="nav-link">Dashboard</a>
+            <a href="penjelasan.html" class="nav-link">Data Flow</a>
+            <a href="korelasi.html" class="nav-link">Korelasi & Kausalitas</a>
+            <a href="klasifikasi.html" class="nav-link active">Klasifikasi</a>
+            <a href="klustering.html" class="nav-link">Klustering</a>
+        </div>
+
+    </nav>
+
+    <div class="dashboard-wrapper">
+
+        <h1 style="margin-bottom: 10px;">
+            Penjelasan Analisis Klasifikasi
+        </h1>
+
+        <div class="insight-box" style="margin-top: 30px;">
+
+            <h2>MODEL KLASIFIKASI</h2>
+
+            <p>
+                Analisis klasifikasi dilakukan menggunakan
+                <strong>Random Forest Classifier</strong>.
+            </p>
+
+            <p>
+                Model digunakan untuk memprediksi hasil cluster
+                berdasarkan fitur yang tersedia pada dataset.
+            </p>
+
+        </div>
+
+        <div class="insight-box">
+
+            <h2>HASIL EVALUASI MODEL</h2>
+
+            <p>
+                Hasil evaluasi menunjukkan accuracy sebesar:
+                <strong>98.78%</strong>.
+            </p>
+
+            <p>
+                Nilai ini menunjukkan bahwa model mampu mempelajari
+                pola cluster dengan sangat baik.
+            </p>
+
+            <div class="kpi-container" style="margin-top: 20px;">
+
+                <div class="card">
+                    <h3>Accuracy</h3>
+                    <h2>98.78%</h2>
+                    <p>Akurasi sangat tinggi.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Model</h3>
+                    <h2>Random Forest</h2>
+                    <p>Metode ensemble learning.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Status</h3>
+                    <h2>Stabil</h2>
+                    <p>Error klasifikasi rendah.</p>
+                </div>
+
+            </div>
+
+            <div class="chart-box" style="margin-top: 30px;">
+
+                <h3 style="margin-bottom: 15px;">
+                    Confusion Matrix
+                </h3>
+
+                <div style="
+                    width: 100%;
+                    height: 450px;
+                    border: 2px dashed #cbd5e1;
+                    border-radius: 14px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    background: #f8fafc;
+                ">
+                    <img src="img/confusion_matrix.png" alt="Confusion Matrix" style="max-width: 100%; max-height: 100%;">
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="insight-box">
+
+            <h2>FEATURE IMPORTANCE</h2>
+
+            <p>
+                Berdasarkan hasil Random Forest,
+                variabel paling dominan adalah:
+                <strong>tahun</strong>
+                dan
+                <strong>kode_provinsi</strong>.
+            </p>
+
+            <p>
+                Hal ini menunjukkan bahwa faktor waktu dan wilayah
+                memiliki pengaruh besar terhadap pola data.
+            </p>
+
+            <p>
+                Variabel vaksinasi dan rasio vaksinasi terhadap kematian
+                juga memberikan kontribusi penting
+                dalam proses klasifikasi.
+            </p>
+
+            <div class="chart-box" style="margin-top: 30px;">
+
+                <h3 style="margin-bottom: 15px;">
+                    Grafik Feature Importance
+                </h3>
+
+                <div style="
+                    width: 100%;
+                    height: 420px;
+                    border: 2px dashed #cbd5e1;
+                    border-radius: 14px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    background: #f8fafc;
+                ">
+                    <img src="img/feature_importance.png" alt="Grafik Feature Importance" style="max-width: 100%; max-height: 100%;">
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="insight-box">
+
+            <h2>DOWNLOAD MODEL</h2>
+
+            <p>
+                File model hasil klasifikasi
+                dapat diunduh melalui tombol berikut.
+            </p>
+
+            <div style="margin-top: 25px;">
+
+                <a href="model/random_forest_model.pkl" download class="nav-link" style="
+                        padding: 12px 20px;
+                        border-radius: 10px;
+                        text-decoration: none;
+                        display: inline-block;
+                    ">
+                    Download Random Forest Model
+                </a>
+
+            </div>
+
+        </div>
+
+        <div class="insight-box">
+
+            <h2>KESIMPULAN</h2>
+
+            <p>
+                Random Forest berhasil melakukan klasifikasi cluster
+                dengan tingkat akurasi yang sangat tinggi.
+            </p>
+
+            <p>
+                Hasil confusion matrix menunjukkan sebagian besar
+                prediksi berada pada diagonal utama,
+                sehingga model dinilai stabil dan konsisten.
+            </p>
+
+        </div>
+
+    </div>
+
+    <footer class="site-footer">
+
+        <h3>Dikembangkan Oleh:</h3>
+
+        <div class="dev-names">
+
+            <span>
+                Sesa Nugroho Satriva - 23051430031
+            </span>
+
+            <span class="divider">|</span>
+
+            <span>
+                Baja Ikhlas Auriol - 23051430043
+            </span>
+
+        </div>
+
+    </footer>
+
+</body>
+
+</html>
