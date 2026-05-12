@@ -1,0 +1,212 @@
+```html
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Penjelasan Korelasi dan Kausalitas</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <nav class="top-nav">
+        <div class="nav-brand">
+            <img src="img/logo_uny.png" alt="Logo UNY" class="nav-logo">
+            <img src="img/Logo Teknik Industri UNY.png" alt="Logo TI UNY" class="nav-logo">
+            <div class="brand-text">
+                <span class="course-title">Mata Kuliah Analitika Data</span>
+                <span class="univ-title">Teknik Industri - UNY</span>
+            </div>
+        </div>
+
+        <div class="nav-links">
+            <a href="overview.html" class="nav-link">Overview</a>
+            <a href="executive-summary.html" class="nav-link">Executive Summary</a>
+            <a href="index.html" class="nav-link">Dashboard</a>
+            <a href="penjelasan.html" class="nav-link">Data Flow</a>
+            <a href="korelasi.html" class="nav-link active">Korelasi & Kausalitas</a>
+        </div>
+    </nav>
+
+    <div class="dashboard-wrapper">
+
+        <h1 style="margin-bottom: 10px;">
+            Penjelasan Uji Korelasi dan Kausalitas
+        </h1>
+
+        <div class="insight-box" style="margin-top: 30px;">
+            <h2>LATAR BELAKANG ANALISIS</h2>
+
+            <p>
+                Analisis dilakukan untuk memahami hubungan antara jumlah vaksinasi COVID-19
+                dengan jumlah kematian pada berbagai provinsi dan periode waktu tertentu.
+                Data yang digunakan telah melalui proses normalisasi dalam skala 1:100.000
+                penduduk agar perbandingan antar wilayah menjadi lebih adil dan representatif.
+            </p>
+
+            <p>
+                Fokus utama penelitian adalah mengidentifikasi apakah peningkatan vaksinasi
+                memiliki hubungan statistik terhadap perubahan jumlah kematian serta apakah
+                hubungan tersebut dapat menunjukkan indikasi kausalitas.
+            </p>
+        </div>
+
+        <div class="insight-box">
+
+            <h2>UJI KORELASI PEARSON</h2>
+
+            <p>
+                Hasil uji Pearson menunjukkan nilai korelasi sebesar
+                <strong>r = -0.3953</strong>.
+                Nilai negatif menunjukkan bahwa hubungan antara vaksinasi
+                dan kematian bersifat berlawanan arah.
+            </p>
+
+            <p>
+                Artinya, ketika jumlah vaksinasi meningkat,
+                jumlah kematian cenderung mengalami penurunan.
+            </p>
+
+            <div class="kpi-container" style="margin-top: 20px;">
+
+                <div class="card">
+                    <h3>Koefisien Korelasi</h3>
+                    <h2>-0.3953</h2>
+                    <p>Hubungan negatif sedang.</p>
+                </div>
+
+                <div class="card">
+                    <h3>p-value</h3>
+                    <h2>0.000328</h2>
+                    <p>Signifikan secara statistik.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Status</h3>
+                    <h2>Valid</h2>
+                    <p>Hubungan dapat diterima secara statistik.</p>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="insight-box">
+
+            <h2>INTERPRETASI HASIL</h2>
+
+            <p>
+                Nilai p-value sebesar <strong>0.000328</strong>
+                menunjukkan bahwa hubungan antara vaksinasi dan kematian
+                signifikan secara statistik karena berada di bawah 0.05.
+            </p>
+
+            <p>
+                Namun, kekuatan hubungan berada pada kategori sedang,
+                sehingga vaksinasi bukan satu-satunya faktor yang
+                memengaruhi jumlah kematian COVID-19.
+            </p>
+
+            <p>
+                Faktor lain seperti fasilitas kesehatan,
+                kepadatan penduduk, dan kebijakan daerah
+                tetap dapat memengaruhi hasil akhir data.
+            </p>
+
+        </div>
+
+        <div class="insight-box">
+
+            <h2>UJI KAUSALITAS GRANGER</h2>
+
+            <p>
+                Uji Granger digunakan untuk melihat apakah data vaksinasi
+                pada periode sebelumnya dapat membantu memprediksi
+                jumlah kematian pada periode berikutnya.
+            </p>
+
+            <div class="kpi-container" style="margin-top: 20px;">
+
+                <div class="card">
+                    <h3>Lag 1 Minggu</h3>
+                    <h2>0.0009</h2>
+                    <p>p-value &lt; 0.05</p>
+                </div>
+
+                <div class="card">
+                    <h3>Lag 2 Minggu</h3>
+                    <h2>0.0005</h2>
+                    <p>p-value &lt; 0.05</p>
+                </div>
+
+                <div class="card">
+                    <h3>Status</h3>
+                    <h2>Signifikan</h2>
+                    <p>Kausalitas prediktif terdeteksi.</p>
+                </div>
+
+            </div>
+
+            <p style="margin-top: 20px;">
+                Karena kedua p-value berada di bawah 0.05,
+                maka data vaksinasi memiliki kemampuan prediktif
+                terhadap perubahan angka kematian pada periode selanjutnya.
+            </p>
+
+            <p>
+                Hasil ini menunjukkan bahwa perubahan vaksinasi
+                pada waktu sebelumnya berkaitan dengan perubahan
+                fatalitas di masa berikutnya.
+            </p>
+
+            <p>
+                Namun, uji Granger tidak membuktikan hubungan sebab-akibat mutlak,
+                melainkan menunjukkan adanya pengaruh prediktif antar variabel
+                berdasarkan pola waktu pada data.
+            </p>
+
+        </div>
+
+        <div class="insight-box">
+            <h2>KESIMPULAN</h2>
+
+            <p>
+                Berdasarkan hasil analisis korelasi dan kausalitas,
+                vaksinasi COVID-19 memiliki hubungan yang cukup kuat
+                terhadap perubahan jumlah kematian pada berbagai provinsi.
+            </p>
+
+            <p>
+                Analisis korelasi menunjukkan adanya kecenderungan hubungan negatif,
+                yaitu peningkatan vaksinasi diikuti dengan penurunan tingkat kematian.
+                Sementara itu, analisis kausalitas menunjukkan indikasi bahwa vaksinasi
+                berkontribusi terhadap pengendalian fatalitas pandemi,
+                meskipun masih terdapat faktor eksternal lain yang memengaruhi hasil.
+            </p>
+
+            <p>
+                Dashboard ini dapat digunakan sebagai alat bantu analisis visual
+                untuk mendukung pengambilan keputusan berbasis data,
+                terutama dalam mengevaluasi efektivitas program vaksinasi
+                dan distribusi layanan kesehatan di setiap wilayah.
+            </p>
+        </div>
+
+    </div>
+
+    <footer class="site-footer">
+        <h3>Dikembangkan Oleh:</h3>
+        <div class="dev-names">
+            <span>Sesa Nugroho Satriva - 23051430031</span>
+            <span class="divider">|</span>
+            <span>Baja Ikhlas Auriol - 23051430043</span>
+        </div>
+    </footer>
+
+</body>
+
+</html>
+```
