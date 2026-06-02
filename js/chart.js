@@ -202,6 +202,13 @@ function render4Charts(dataMingguan, dataProvinsi, selectedProvinsi) {
             };
         });
 
+        // --- TAMBAHAN UNTUK HEATMAP ---
+        // Mencari nilai terkecil dan terbesar untuk membangun skala gradasi warna
+        const validPercentages = mapData.filter(d => d.isSelected).map(d => d.persentase);
+        const minPer = validPercentages.length > 0 ? Math.min(...validPercentages) : 0;
+        const maxPer = validPercentages.length > 0 ? Math.max(...validPercentages) : 1;
+        // ------------------------------
+
         const ctxMap = document.getElementById("chartMap").getContext("2d");
         if (chartMapInst) chartMapInst.destroy();
 
@@ -219,9 +226,18 @@ function render4Charts(dataMingguan, dataProvinsi, selectedProvinsi) {
                         const rawData = context.raw ? context.raw.extra : null;
                         if (!rawData || !rawData.isSelected) return '#e0e0e0';
 
-                        // 5. TERAPKAN WARNA PADA PETA
-                        // Memanggil fungsi yang sama dengan line chart agar warnanya persis sama
-                        return getProvColor(rawData.provinsiAsli);
+                        // 5. TERAPKAN WARNA PADA PETA (HEATMAP GRADIENT)
+                        let range = maxPer - minPer;
+                        // Hindari pembagian dengan 0 jika semua data bernilai sama
+                        let ratio = range === 0 ? 0.5 : (rawData.persentase - minPer) / range;
+
+                        // Nilai rasio rendah (mendekati minimum) akan mendapat Hue = 0 (Merah / Panas)
+                        // Nilai rasio tinggi (mendekati maksimum) akan mendapat Hue = 120 (Hijau / Dingin)
+                        // (Catatan: Jika logikanya ingin dibalik supaya persentase tinggi = merah, 
+                        // ubah formulanya menjadi: let hue = (1 - ratio) * 120; )
+                        let hue = ratio * 120;
+
+                        return `hsl(${hue}, 100%, 50%)`;
                     }
                 }]
             },
