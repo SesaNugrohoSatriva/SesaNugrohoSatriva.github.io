@@ -235,7 +235,7 @@ function render4Charts(dataMingguan, dataProvinsi, selectedProvinsi) {
                         // Nilai rasio tinggi (mendekati maksimum) akan mendapat Hue = 120 (Hijau / Dingin)
                         // (Catatan: Jika logikanya ingin dibalik supaya persentase tinggi = merah, 
                         // ubah formulanya menjadi: let hue = (1 - ratio) * 120; )
-                        let hue = ratio * 120;
+                        let hue = (1 - ratio) * 120;
 
                         return `hsl(${hue}, 100%, 50%)`;
                     }
