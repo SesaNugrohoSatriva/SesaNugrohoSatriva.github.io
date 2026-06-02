@@ -563,3 +563,52 @@ canvas {
         padding: 10px;
     }
 }
+
+.ml-card {
+    margin: 20px 0;
+    padding: 25px 35px;
+    border-radius: 15px;
+
+    background: #2d435c;
+
+    border-left: 8px solid #e67e22;
+
+    color: white;
+
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+.ml-card-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+}
+
+.ml-info h3 {
+    margin-bottom: 8px;
+    font-size: 1.8rem;
+}
+
+.ml-info p {
+    margin: 0;
+    opacity: 0.9;
+}
+
+.ml-btn {
+    background: #e67e22;
+    color: white;
+    text-decoration: none;
+
+    padding: 14px 24px;
+    border-radius: 10px;
+
+    font-weight: 600;
+
+    transition: all 0.3s ease;
+}
+
+.ml-btn:hover {
+    background: #d35400;
+    transform: translateY(-2px);
+}
